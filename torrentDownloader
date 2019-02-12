@@ -1,0 +1,33 @@
+#!/bin/bash
+LOG="/var/log/torrent-cli.log"
+fileT() {
+
+	if ! echo $1 | grep -q ".torrent" ;then
+		echo "$1 is not torrent file" && exit
+	fi
+}
+man() {
+	echo "how to run this tool :
+type \"torrentDownloader your-file.torrent\"   to start download"
+}
+HELP() {
+	echo "use option :
+man        ->  for see how to use it
+-h|--help  ->  for see this help"
+}
+case $1 in
+ 	*.torrent ) clear
+printf "download location , just enter for place your download to [`pwd`] : "
+read DIR
+			if [[ -z $DIR ]]; then
+				DIR=$(pwd)
+			fi
+transmission-cli $1 -w $DIR
+		;;
+	-h|--help)HELP
+		;;
+	man)man
+		;;
+	*)HELP
+		;;
+esac
