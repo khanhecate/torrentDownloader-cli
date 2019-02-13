@@ -1,5 +1,8 @@
 #!/bin/bash
 LOG="/var/log/torrent-cli.log"
+DATE() {
+	date +%H%M #back in 00:01
+}
 fileT() {
 
 	if ! echo $1 | grep -q ".torrent" ;then
@@ -22,7 +25,16 @@ read DIR
 			if [[ -z $DIR ]]; then
 				DIR=$(pwd)
 			fi
-transmission-cli $1 -w $DIR
+			while true
+			do
+				if DATE | grep -q "1830\|1831";then
+					echo "starting :)"
+					transmission-cli $1 -w $DIR >>$LOG
+				else echo "waiting :)"
+					sleep 60
+				fi
+			done
+
 		;;
 	-h|--help)HELP
 		;;
